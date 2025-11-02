@@ -1,18 +1,16 @@
 openapi: 3.0.0
 info:
   title: Shodan Security API
-  description: Complete Shodan API specification for security scanning
+  description: Complete Shodan API specification for security scanning and intelligence gathering.
   version: 1.0.0
 servers:
   - url: https://api.shodan.io
 
-
-
-paths: 
+paths:
   /shodan/host/{ip}:
     get:
       operationId: getHostInfo
-      summary: Get host information for IP address
+      summary: Get detailed information for a specific host.
       parameters:
         - in: path
           name: ip
@@ -20,142 +18,68 @@ paths:
             type: string
           required: true
           example: "8.8.8.8"
-        - in: query
-          name: key
-          schema:
-              type: string
-          required: true
-  
       responses:
         '200':
-          description: Host information retrieved successfully
+          description: Host information retrieved successfully.
         '400':
-          description: Invalid IP address
+          description: Invalid IP address.
         '401':
-          description: Invalid API key
+          description: Invalid API key.
         '403':
-          description: Requires membership or higher to access
+          description: Requires membership or higher to access.
         '404':
-          description: Host not found
-  
+          description: Host not found.
+
   /shodan/ports:
     get:
-      operationId: getallports
-      summary: List all ports that Shodan is crawling on the Internet.
-      
-      parameters:
-        - in:  query
-          name: key
-          schema:
-            type: string
-          required: true
-        
-        
+      operationId: listPorts
+      summary: List all ports that Shodan is currently crawling on the Internet.
       responses:
         '200':
-          description: Host information retrieved successfully
-        '400':
-          description: Invalid IP address
+          description: Ports list retrieved successfully.
         '401':
-          description: Invalid API key
-        '403':
-          description: Requires membership or higher to access
-        '404':
-          description: Host not found
+          description: Invalid API key.
+
   /shodan/host/count:
     get:
-      operationId: Search Shodan without Results
-      summary: this method does not return any host results, it only returns the total number of results that matched the query
-      
+      operationId: countHosts
+      summary: Get the total number of results that matched a query (without returning results).
       parameters:
-        - in: query
-          name: key
-          schema:
-            type: string
-          required: true
         - in: query
           name: query
           schema:
             type: string
           required: true
-          
+          example: "apache"
       responses:
         '200':
-          description: Host information retrieved successfully
-        '400':
-          description: Invalid IP address
+          description: Count retrieved successfully.
         '401':
-          description: Invalid API key
-        '403':
-          description: Requires membership or higher to access
-        '404':
-          description: Host not found   
+          description: Invalid API key.
+
   /shodan/host/search:
     get:
-      operationId: getSearch Shodan
-      summary: Search Shodan using the same query syntax as the website and use facets to get summary information for different properties.
+      operationId: searchHosts
+      summary: Search Shodan using website-like query syntax.
       parameters:
-        - in: query
-          name: key
-          schema:
-            type: string
-          required: true
         - in: query
           name: query
           schema:
             type: string
           required: true
-    
+          example: "nginx country:US"
       responses:
         '200':
-          description: Host information retrieved successfully
-        '400':
-          description: Invalid IP address
+          description: Search results retrieved successfully.
         '401':
-          description: Invalid API key
-        '403':
-          description: Requires membership or higher to access
-        '404':
-          description: Host not found
+          description: Invalid API key.
+
   /shodan/protocols:
     get:
-      operationId: List all protocols
-      summary: This method returns an object containing all the protocols that can be used when launching an Internet scan.
-      
-      parameters:
-        - in: query
-          name: key
-          schema:
-            type: string
-          required: true
-          
+      operationId: listProtocols
+      summary: List all protocols that can be used when launching an Internet scan.
       responses:
         '200':
-          description: Host information retrieved successfully
-        '400':
-          description: Invalid IP address
+          description: Protocols retrieved successfully.
         '401':
-          description: Invalid API key
-        '403':
-          description: Requires membership or higher to access
-        '404':
-          description: Host not found   
-      
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-      
-        
+          description: Invalid API key.
