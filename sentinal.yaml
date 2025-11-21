@@ -1,13 +1,8 @@
 openapi: 3.0.1
 info:
-  title: Microsoft Sentinel - Incident Comments
-  version: "1.0.0"
-  description: |
-    API for retrieving comments from Microsoft Sentinel incidents.
-    #ExamplePrompts Show comments for Sentinel incident 456
-    #ExamplePrompts Get incident comments for incident ABC123
-    #ExamplePrompts Retrieve all comments for a Sentinel incident
-    #ExamplePrompts List comments for a specific incident in Sentinel
+  title: Sentinel Incident Comments API
+  description: API to retrieve comments of a Microsoft Sentinel incident
+  version: 1.0.0
 
 servers:
   - url: https://management.azure.com
@@ -15,54 +10,39 @@ servers:
 paths:
   /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents/{incidentId}/comments:
     get:
-      operationId: GetIncidentComments
-      summary: Retrieve comments for a Sentinel incident.
-      description: |
-        Fetches all comments associated with a given Microsoft Sentinel incident.
-        Useful for investigation context and analyst collaboration.
-        #ExamplePrompts Show Sentinel incident comments
-        #ExamplePrompts Get comments for incident {incidentId}
-
+      operationId: getIncidentComments
+      summary: Get comments for a Microsoft Sentinel incident
+      description: Returns all comments associated with a Sentinel incident
       parameters:
-        - in: path
-          name: subscriptionId
+        - name: subscriptionId
+          in: path
           required: true
           schema:
             type: string
-          description: Azure Subscription ID.
-
-        - in: path
-          name: resourceGroupName
+        - name: resourceGroupName
+          in: path
           required: true
           schema:
             type: string
-          description: Resource group name.
-
-        - in: path
-          name: workspaceName
+        - name: workspaceName
+          in: path
           required: true
           schema:
             type: string
-          description: Workspace name.
-
-        - in: path
-          name: incidentId
+        - name: incidentId
+          in: path
           required: true
           schema:
             type: string
-          description: The ID of the Sentinel incident.
-
-        - in: query
-          name: api-version
+        - name: api-version
+          in: query
           required: true
           schema:
             type: string
-            default: "2023-11-01-preview"
-          description: Azure API version.
-
+            default: "2023-02-01"
       responses:
         "200":
-          description: Successfully retrieved incident comments.
+          description: Comments retrieved successfully
           content:
             application/json:
               schema:
@@ -73,6 +53,8 @@ paths:
                     items:
                       type: object
                       properties:
+                        id:
+                          type: string
                         name:
                           type: string
                         properties:
@@ -84,8 +66,9 @@ paths:
                               type: string
                             createdTimeUtc:
                               type: string
-                              format: date-time
+        "400":
+          description: Bad Request
         "401":
-          description: Unauthorized (AAD authentication required)
+          description: Unauthorized
         "404":
-          description: Incident not found.
+          description: Incident not found
