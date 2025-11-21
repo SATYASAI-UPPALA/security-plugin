@@ -2,7 +2,12 @@ openapi: 3.0.1
 info:
   title: Microsoft Sentinel - Incident Comments
   version: "1.0.0"
-  description: API to retrieve comments for a Sentinel Incident.
+  description: |
+    API for retrieving comments from Microsoft Sentinel incidents.
+    #ExamplePrompts Show comments for Sentinel incident 456
+    #ExamplePrompts Get incident comments for incident ABC123
+    #ExamplePrompts Retrieve all comments for a Sentinel incident
+    #ExamplePrompts List comments for a specific incident in Sentinel
 
 servers:
   - url: https://management.azure.com
@@ -12,7 +17,12 @@ paths:
     get:
       operationId: GetIncidentComments
       summary: Retrieve comments for a Sentinel incident.
-      description: Returns a list of comments associated with the specified Microsoft Sentinel incident.
+      description: |
+        Fetches all comments associated with a given Microsoft Sentinel incident.
+        Useful for investigation context and analyst collaboration.
+        #ExamplePrompts Show Sentinel incident comments
+        #ExamplePrompts Get comments for incident {incidentId}
+
       parameters:
         - in: path
           name: subscriptionId
@@ -33,14 +43,14 @@ paths:
           required: true
           schema:
             type: string
-          description: Workspace name (Log Analytics workspace).
+          description: Workspace name.
 
         - in: path
           name: incidentId
           required: true
           schema:
             type: string
-          description: ID of the Sentinel incident.
+          description: The ID of the Sentinel incident.
 
         - in: query
           name: api-version
@@ -48,7 +58,7 @@ paths:
           schema:
             type: string
             default: "2023-11-01-preview"
-          description: API version.
+          description: Azure API version.
 
       responses:
         "200":
@@ -65,21 +75,17 @@ paths:
                       properties:
                         name:
                           type: string
-                          description: Comment ID.
                         properties:
                           type: object
                           properties:
                             message:
                               type: string
-                              description: Text content of the comment.
                             author:
                               type: string
-                              description: Who added the comment.
                             createdTimeUtc:
                               type: string
                               format: date-time
-                              description: When the comment was created.
         "401":
-          description: Authentication failure.
+          description: Unauthorized (AAD authentication required)
         "404":
           description: Incident not found.
