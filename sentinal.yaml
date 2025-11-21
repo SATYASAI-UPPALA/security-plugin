@@ -1,0 +1,110 @@
+openapi: 3.0.1
+info:
+  title: Microsoft Sentinel Incident Comments API
+  version: 1.0.0
+servers:
+  - url: https://management.azure.com
+security:
+  - azure_auth: []
+paths:
+  /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents/{incidentId}/comments/{incidentCommentId}:
+    get:
+      summary: Get incident comment details
+      operationId: getIncidentComment
+      parameters:
+        - name: subscriptionId
+          in: path
+          required: true
+          description: The ID of the target subscription. The value must be a UUID.
+          schema:
+            type: string
+            format: uuid
+        - name: resourceGroupName
+          in: path
+          required: true
+          description: The name of the resource group. Case insensitive.
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 90
+        - name: workspaceName
+          in: path
+          required: true
+          description: The name of the workspace.
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 90
+            pattern: '^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$'
+        - name: incidentId
+          in: path
+          required: true
+          description: Incident ID.
+          schema:
+            type: string
+        - name: incidentCommentId
+          in: path
+          required: true
+          description: Incident comment ID.
+          schema:
+            type: string
+        - name: api-version
+          in: query
+          required: true
+          description: The API version to use for this operation.
+          schema:
+            type: string
+            minLength: 1
+            example: "2025-09-01"
+      responses:
+        '200':
+          description: OK, Operation successfully completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncidentComment'
+        'default':
+          description: Error response describing why the operation failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudError'
+
+
+
+        
+                
+components:
+  securitySchemes:
+    azure_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
+          scopes:
+            https://management.azure.com/.default: Access Azure Management API
+  schemas:
+    IncidentComment:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        type: { type: string }
+        properties:
+          type: object
+          properties:
+            message: { type: string }
+            author: { type: string }
+            createdTimeUtc: { type: string, format: date-time }
+    CloudError:
+      type: object
+      properties:
+        code: { type: string }
+        message: { type: string }
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              code: { type: string }
+              message: { type: string }
