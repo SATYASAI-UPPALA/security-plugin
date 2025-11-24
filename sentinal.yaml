@@ -1,17 +1,91 @@
 openapi: 3.0.4
 info:
-  title: Microsoft Sentinel Incident Comment API
+  title: Microsoft Sentinel Incident Comment - Get API
   version: "1.0.0"
   description: |
-    API to get a specific incident comment or list all comments for a Microsoft Sentinel incident.
-
+    API to get a specific incident comment from Microsoft Sentinel.
 servers:
   - url: https://management.azure.com
 
 paths:
+  /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents/{incidentId}/comments/{incidentCommentId}:
+    get:
+      summary: Get Incident Comment
+      description: Gets a comment for a given Microsoft Sentinel incident.
+      tags:
+        - Incident Comments
+      operationId: getIncidentComment
+      security:
+        - AADDelegated: [user_impersonation]
+
+      parameters:
+        - name: subscriptionId
+          in: path
+          required: true
+          description: The ID of the target subscription (UUID)
+          schema:
+            type: string
+            format: uuid
+
+        - name: resourceGroupName
+          in: path
+          required: true
+          description: The name of the resource group.
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 90
+
+        - name: workspaceName
+          in: path
+          required: true
+          description: The name of the workspace.
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 90
+            pattern: "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$"
+
+        - name: incidentId
+          in: path
+          required: true
+          description: Incident ID
+          schema:
+            type: string
+
+        - name: incidentCommentId
+          in: path
+          required: true
+          description: Specific incident comment ID
+          schema:
+            type: string
+
+        - name: api-version
+          in: query
+          required: true
+          description: API version
+          schema:
+            type: string
+            minLength: 1
+            example: "2025-09-01"
+
+      responses:
+        "200":
+          description: OK - Incident Comment Retrieved Successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IncidentComment"
+
+        default:
+          description: Cloud Error response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CloudError"
 
 
-  # GET – LIST INCIDENT COMMENTS
+# GET – LIST INCIDENT COMMENTS
  
   /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents/{incidentId}/comments:
     get:
@@ -112,85 +186,6 @@ paths:
                 $ref: "#/components/schemas/CloudError"
 
 
-  
-  # GET – GET SPECIFIC INCIDENT COMMENT
- 
-  /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents/{incidentId}/comments/{incidentCommentId}:
-    get:
-      summary: Get Incident Comment
-      description: Gets a specific comment for a Microsoft Sentinel incident.
-      tags:
-        - Incident Comments
-      operationId: getIncidentComment
-
-      security:
-        - AADDelegated: [user_impersonation]
-
-      parameters:
-        - name: subscriptionId
-          in: path
-          required: true
-          description: The ID of the target subscription (UUID)
-          schema:
-            type: string
-            format: uuid
-
-        - name: resourceGroupName
-          in: path
-          required: true
-          description: The name of the resource group.
-          schema:
-            type: string
-            minLength: 1
-            maxLength: 90
-
-        - name: workspaceName
-          in: path
-          required: true
-          description: The name of the workspace.
-          schema:
-            type: string
-            minLength: 1
-            maxLength: 90
-            pattern: "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$"
-
-        - name: incidentId
-          in: path
-          required: true
-          description: Incident ID.
-          schema:
-            type: string
-
-        - name: incidentCommentId
-          in: path
-          required: true
-          description: Specific incident comment ID.
-          schema:
-            type: string
-
-        - name: api-version
-          in: query
-          required: true
-          description: API version (default: 2025-09-01)
-          schema:
-            type: string
-            example: "2025-09-01"
-
-      responses:
-        "200":
-          description: OK - Incident Comment Retrieved Successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/IncidentComment"
-
-        default:
-          description: Cloud Error response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CloudError"
-
 components:
   securitySchemes:
     AADDelegated:
@@ -202,30 +197,33 @@ components:
             user_impersonation: impersonate your user account
 
   schemas:
-
-   
-    # SINGLE INCIDENT COMMENT
     IncidentComment:
       type: object
       properties:
         id:
           type: string
+          description: Resource ID of the incident comment.
         name:
           type: string
+          description: Name of the incident comment.
         type:
           type: string
+          description: Resource type.
         properties:
           type: object
           properties:
             message:
               type: string
+              description: User comment text
             author:
               type: string
+              description: Author of the comment
             createdTimeUtc:
               type: string
               format: date-time
-
-    # LIST OF INCIDENT COMMENTS
+              description: Creation timestamp in UTC
+      
+      # LIST OF INCIDENT COMMENTS
     
     IncidentCommentList:
       type: object
@@ -239,9 +237,6 @@ components:
           type: string
           description: URL to retrieve the next set of results, if any.
 
-    
-    # ERROR RESPONSE
-    
     CloudError:
       type: object
       properties:
