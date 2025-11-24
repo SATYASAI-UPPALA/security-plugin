@@ -9,7 +9,60 @@ servers:
 
 paths:
  
- 
+    /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents?api-version=2025-09-01:
+     get:
+      summary: Gets all incidents.
+      description: Gets all incidents for a given Microsoft Sentinel incident.
+      tags:
+        - Incidents
+      operationId: listIncidents
+
+      parameters:
+        - name: subscriptionId
+          in: path
+          required: true
+          description: The ID of the target subscription (UUID)
+          schema:
+            type: string
+            format: uuid
+
+        - name: resourceGroupName
+          in: path
+          required: true
+          description: The name of the resource group (case insensitive)
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 90
+
+        - name: workspaceName
+          in: path
+          required: true
+          description: The name of the workspace
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 90
+            pattern: "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$"
+
+        - name: api-version
+          in: query
+          required: true
+          description: API version 
+          schema:
+            type: string
+            example: "2025-09-01"
+            default: 2025-09-01
+
+
+      responses:
+        "200":
+          description: OK - List of Incident Comments Retrieved Successfully
+
+        default:
+          description: Cloud Error response
+      
+
   /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents/{incidentId}/comments:
     get:
       summary: List Incident Comments
