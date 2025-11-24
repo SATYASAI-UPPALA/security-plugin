@@ -22,8 +22,7 @@ paths:
       operationId: listIncidentComments
 
       security:
-        - AADDelegated:
-            - user_impersonation
+        - AADDelegated: [user_impersonation]
 
       parameters:
         - name: subscriptionId
@@ -125,8 +124,7 @@ paths:
       operationId: getIncidentComment
 
       security:
-        - AADDelegated:
-            - user_impersonation
+        - AADDelegated: [user_impersonation]
 
       parameters:
         - name: subscriptionId
