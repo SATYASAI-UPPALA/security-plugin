@@ -10,9 +10,9 @@ servers:
 
 paths:
 
-  ###########################################################################
+
   # GET – LIST INCIDENT COMMENTS
-  ###########################################################################
+ 
   /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents/{incidentId}/comments:
     get:
       summary: List Incident Comments
@@ -113,9 +113,9 @@ paths:
                 $ref: "#/components/schemas/CloudError"
 
 
-  ###########################################################################
+  
   # GET – GET SPECIFIC INCIDENT COMMENT
-  ###########################################################################
+ 
   /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents/{incidentId}/comments/{incidentCommentId}:
     get:
       summary: Get Incident Comment
@@ -205,9 +205,8 @@ components:
 
   schemas:
 
-    ###########################################################################
+   
     # SINGLE INCIDENT COMMENT
-    ###########################################################################
     IncidentComment:
       type: object
       properties:
@@ -228,9 +227,8 @@ components:
               type: string
               format: date-time
 
-    ###########################################################################
     # LIST OF INCIDENT COMMENTS
-    ###########################################################################
+    
     IncidentCommentList:
       type: object
       properties:
@@ -243,9 +241,9 @@ components:
           type: string
           description: URL to retrieve the next set of results, if any.
 
-    ###########################################################################
+    
     # ERROR RESPONSE
-    ###########################################################################
+    
     CloudError:
       type: object
       properties:
