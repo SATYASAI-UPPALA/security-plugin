@@ -9,7 +9,6 @@ servers:
 
 paths:
  
-# GET – LIST INCIDENT COMMENTS
  
   /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents/{incidentId}/comments:
     get:
@@ -19,8 +18,6 @@ paths:
         - Incident Comments
       operationId: listIncidentComments
 
-      # security:
-      #   - AADDelegated: [user_impersonation]
 
       parameters:
         - name: subscriptionId
@@ -98,11 +95,7 @@ paths:
       responses:
         "200":
           description: OK - List of Incident Comments Retrieved Successfully
-          # content:
-          #   application/json:
-          #     schema:
-          #       $ref: "#/components/schemas/IncidentCommentList"
-
+          
         default:
           description: Cloud Error response
       
