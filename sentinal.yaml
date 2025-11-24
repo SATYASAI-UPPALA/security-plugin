@@ -136,10 +136,11 @@ paths:
         - name: api-version
           in: query
           required: true
-          description: API version (default: 2025-09-01)
+          description: API version 
           schema:
             type: string
             example: "2025-09-01"
+            default: 2025-09-01
 
         - name: $filter
           in: query
