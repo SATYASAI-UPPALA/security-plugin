@@ -8,83 +8,7 @@ servers:
   - url: https://management.azure.com
 
 paths:
-  /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents/{incidentId}/comments/{incidentCommentId}:
-    get:
-      summary: Get Incident Comment
-      description: Gets a comment for a given Microsoft Sentinel incident.
-      tags:
-        - Incident Comments
-      operationId: getIncidentComment
-      security:
-        - AADDelegated: [user_impersonation]
-
-      parameters:
-        - name: subscriptionId
-          in: path
-          required: true
-          description: The ID of the target subscription (UUID)
-          schema:
-            type: string
-            format: uuid
-
-        - name: resourceGroupName
-          in: path
-          required: true
-          description: The name of the resource group.
-          schema:
-            type: string
-            minLength: 1
-            maxLength: 90
-
-        - name: workspaceName
-          in: path
-          required: true
-          description: The name of the workspace.
-          schema:
-            type: string
-            minLength: 1
-            maxLength: 90
-            pattern: "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$"
-
-        - name: incidentId
-          in: path
-          required: true
-          description: Incident ID
-          schema:
-            type: string
-
-        - name: incidentCommentId
-          in: path
-          required: true
-          description: Specific incident comment ID
-          schema:
-            type: string
-
-        - name: api-version
-          in: query
-          required: true
-          description: API version
-          schema:
-            type: string
-            minLength: 1
-            example: "2025-09-01"
-
-      responses:
-        "200":
-          description: OK - Incident Comment Retrieved Successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/IncidentComment"
-
-        default:
-          description: Cloud Error response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CloudError"
-
-
+ 
 # GET – LIST INCIDENT COMMENTS
  
   /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents/{incidentId}/comments:
@@ -95,8 +19,8 @@ paths:
         - Incident Comments
       operationId: listIncidentComments
 
-      security:
-        - AADDelegated: [user_impersonation]
+      # security:
+      #   - AADDelegated: [user_impersonation]
 
       parameters:
         - name: subscriptionId
@@ -174,69 +98,16 @@ paths:
       responses:
         "200":
           description: OK - List of Incident Comments Retrieved Successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/IncidentCommentList"
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: "#/components/schemas/IncidentCommentList"
 
         default:
           description: Cloud Error response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CloudError"
-
-
-components:
-  securitySchemes:
-    AADDelegated:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
-          scopes:
-            user_impersonation: impersonate your user account
-
-  schemas:
-    IncidentComment:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Resource ID of the incident comment.
-        name:
-          type: string
-          description: Name of the incident comment.
-        type:
-          type: string
-          description: Resource type.
-        properties:
-          type: object
-          properties:
-            message:
-              type: string
-              description: User comment text
-            author:
-              type: string
-              description: Author of the comment
-            createdTimeUtc:
-              type: string
-              format: date-time
-              description: Creation timestamp in UTC
       
-      # LIST OF INCIDENT COMMENTS
-    
-    IncidentCommentList:
-      type: object
-      properties:
-        value:
-          type: array
-          description: List of incident comments
-          items:
-            $ref: "#/components/schemas/IncidentComment"
-        nextLink:
-          type: string
-          description: URL to retrieve the next set of results, if any.
+
+
 
     CloudError:
       type: object
