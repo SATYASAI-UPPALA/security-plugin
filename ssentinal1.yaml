@@ -8,15 +8,70 @@ servers:
   - url: https://management.azure.com
 
 paths:
-  /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents/{incidentId}/comments/{incidentCommentId}:
+ 
+  /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents:
     get:
-      summary: Get Incident Comment
-      description: Gets a comment for a given Microsoft Sentinel incident.
+    
+      summary: Gets all incidents.
+      description: Gets all incidents for a given Microsoft Sentinel incident.
+      tags:
+        - Incidents
+      operationId: listIncidents
+  
+      parameters:
+        - name: subscriptionId
+          in: path
+          required: true
+          description: The ID of the target subscription (UUID)
+          schema:
+            type: string
+            format: uuid
+  
+        - name: resourceGroupName
+          in: path
+          required: true
+          description: The name of the resource group (case insensitive)
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 90
+  
+        - name: workspaceName
+          in: path
+          required: true
+          description: The name of the workspace
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 90
+            pattern: "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$"
+  
+        - name: api-version
+          in: query
+          required: true
+          description: API version 
+          schema:
+            type: string
+            example: "2025-09-01"
+            default: 2025-09-01
+  
+  
+      responses:
+        "200":
+          description: OK - List of Incident Comments Retrieved Successfully
+  
+        default:
+          description: Cloud Error response
+      
+
+  /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents/{incidentId}/comments:
+    get:
+      summary: List Incident Comments
+      description: Gets all comments for a given Microsoft Sentinel incident.
       tags:
         - Incident Comments
-      operationId: getIncidentComment
-      security:
-        - AADDelegated: [user_impersonation]
+      operationId: listIncidentComments
+
 
       parameters:
         - name: subscriptionId
@@ -30,7 +85,7 @@ paths:
         - name: resourceGroupName
           in: path
           required: true
-          description: The name of the resource group.
+          description: The name of the resource group (case insensitive)
           schema:
             type: string
             minLength: 1
@@ -39,7 +94,7 @@ paths:
         - name: workspaceName
           in: path
           required: true
-          description: The name of the workspace.
+          description: The name of the workspace
           schema:
             type: string
             minLength: 1
@@ -53,90 +108,49 @@ paths:
           schema:
             type: string
 
-        - name: incidentCommentId
-          in: path
-          required: true
-          description: Specific incident comment ID
-          schema:
-            type: string
-
         - name: api-version
           in: query
           required: true
-          description: API version
+          description: API version 
           schema:
             type: string
-            minLength: 1
             example: "2025-09-01"
+            default: 2025-09-01
+
+        - name: $filter
+          in: query
+          required: false
+          description: Filters the results based on a Boolean condition.
+          schema:
+            type: string
+
+        - name: $orderby
+          in: query
+          required: false
+          description: Sorts the results.
+          schema:
+            type: string
+
+        - name: $skipToken
+          in: query
+          required: false
+          description: Skiptoken used if previous response returned partial results.
+          schema:
+            type: string
+
+        - name: $top
+          in: query
+          required: false
+          description: Returns only the first N results.
+          schema:
+            type: integer
+            format: int32
 
       responses:
         "200":
-          description: OK - Incident Comment Retrieved Successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/IncidentComment"
-
+          description: OK - List of Incident Comments Retrieved Successfully
+          
         default:
           description: Cloud Error response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CloudError"
+      
 
-components:
-  securitySchemes:
-    AADDelegated:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
-          scopes:
-            user_impersonation: impersonate your user account
-
-  schemas:
-    IncidentComment:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Resource ID of the incident comment.
-        name:
-          type: string
-          description: Name of the incident comment.
-        type:
-          type: string
-          description: Resource type.
-        properties:
-          type: object
-          properties:
-            message:
-              type: string
-              description: User comment text
-            author:
-              type: string
-              description: Author of the comment
-            createdTimeUtc:
-              type: string
-              format: date-time
-              description: Creation timestamp in UTC
-
-    CloudError:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-            message:
-              type: string
-            details:
-              type: array
-              items:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
