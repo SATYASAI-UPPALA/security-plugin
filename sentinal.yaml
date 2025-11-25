@@ -9,7 +9,7 @@ servers:
 
 paths:
  
-  /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents?api-version=2025-09-01:
+  /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/providers/Microsoft.SecurityInsights/incidents:
     get:
     summary: Gets all incidents.
     description: Gets all incidents for a given Microsoft Sentinel incident.
